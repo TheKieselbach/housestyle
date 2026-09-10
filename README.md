@@ -254,6 +254,34 @@ python3 -W error::ResourceWarning -m unittest discover tests -v
 one records a specific way an earlier version was wrong, or a security
 constraint that must keep holding.
 
+## Did it work for you?
+
+The tool has been built and measured on one machine, against one corpus, in
+two languages. That is not enough to know whether it works.
+
+If you set it up, a short note in
+[Discussions](../../discussions) helps more than a star — and four things
+would help most:
+
+1. **Which language, which corpus?** Transcripts, mail, published texts — and
+   roughly how many words before the numbers stopped looking like noise.
+2. **How did you get your texts out?** The export routes in
+   [`docs/getting-your-texts.md`](docs/getting-your-texts.md) are documented
+   from testing, not from using every provider. If yours was different, that
+   is worth a paragraph.
+3. **Which tool did you paste the profile into**, and did it follow it?
+4. **The one that matters: did a draft actually come out different?** Not
+   "did it feel better" — what changed, and does it trace to a number? That
+   is the question this project stands or falls on, and it is the one nobody
+   else asks.
+
+Reports that say it did **not** work are more useful than reports that say it
+did. A profile that reads well and changes nothing is the failure mode worth
+knowing about.
+
+Findings from those reports go into a field-reports section here, with
+attribution, once there are any.
+
 ## Contributing
 
 The most useful contribution is **a language pack** — one JSON file, no code,

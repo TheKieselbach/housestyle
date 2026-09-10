@@ -1,0 +1,13 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Field report — did it work for you?
+    url: https://github.com/TheKieselbach/housestyle/discussions
+    about: >
+      Set it up and want to say how it went? That belongs in Discussions, not
+      in an issue. Especially welcome: it did not work, and here is where it
+      stopped.
+  - name: Security finding
+    url: https://github.com/TheKieselbach/housestyle/security/advisories/new
+    about: >
+      Anything where your corpus could leave the machine. Please report
+      privately, not as a public issue.
