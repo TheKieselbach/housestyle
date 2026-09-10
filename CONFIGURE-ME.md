@@ -4,10 +4,10 @@ Everything specific to *you* lives in one file. Nothing personal is in the
 code — that is deliberate, and it is what makes this repository publishable.
 
 ```bash
-cp voiceprint.conf.example voiceprint.conf
+cp housestyle.conf.example housestyle.conf
 ```
 
-`voiceprint.conf` is git-ignored. Fill in these keys.
+`housestyle.conf` is git-ignored. Fill in these keys.
 
 ## ROOT — required
 

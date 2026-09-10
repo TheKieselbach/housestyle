@@ -1,8 +1,8 @@
 # ─────────────────────────────────────────────────────────────────────────
-# voiceprint configuration
+# housestyle configuration
 #
-# Copy this file to `voiceprint.conf` (same directory) and fill it in.
-# `voiceprint.conf` is git-ignored — your paths and names stay local.
+# Copy this file to `housestyle.conf` (same directory) and fill it in.
+# `housestyle.conf` is git-ignored — your paths and names stay local.
 # ─────────────────────────────────────────────────────────────────────────
 
 # Where the corpus and the finished profile live.

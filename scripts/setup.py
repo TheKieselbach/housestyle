@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Interactive setup. Creates voiceprint.conf and the corpus directories.
+"""Interactive setup. Creates housestyle.conf and the corpus directories.
 
 Nothing is written until you have seen the full list and confirmed it.
 
@@ -12,7 +12,7 @@ import os, sys, shutil, platform, glob
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-CONF = os.path.join(REPO, "voiceprint.conf")
+CONF = os.path.join(REPO, "housestyle.conf")
 LANGS = sorted(f[:-5] for f in os.listdir(os.path.join(REPO, "lang")) if f.endswith(".json"))
 
 TRANSCRIPTS = os.path.expanduser("~/.claude/projects")
@@ -138,7 +138,7 @@ def do_uninstall():
 
 # ───────────────────────────────────────────────────────────────── setup
 def do_setup():
-    print("voiceprint setup\n" + "─" * 60)
+    print("housestyle setup\n" + "─" * 60)
     if not check_requirements():
         sys.exit("\nRequirements not met. See INSTALL.md.")
 

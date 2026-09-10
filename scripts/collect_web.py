@@ -41,7 +41,7 @@ def main():
     out, seen = [], set()
     for url in urls:
         try:
-            req = urllib.request.Request(url, headers={"User-Agent": "voiceprint/1.0"})
+            req = urllib.request.Request(url, headers={"User-Agent": "housestyle/1.0"})
             raw = urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "ignore")
         except Exception as e:
             print(f"!! {url}: {e}")

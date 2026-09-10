@@ -1,4 +1,4 @@
-# voiceprint
+# housestyle
 
 **Learn your own writing voice from your own texts — without sending those
 texts to a model.**
@@ -9,7 +9,7 @@ For a private person that is a nuisance. For a business it is a decision
 nobody made deliberately: every mail you ever sent, in someone else's
 infrastructure, because a draft needed to sound right.
 
-voiceprint takes the other route. It measures your writing **locally** and
+housestyle takes the other route. It measures your writing **locally** and
 produces numbers — sentence lengths, particle use, forms of address,
 punctuation habits, the words you actually reach for. Only the numbers, plus
 a handful of short redacted passages, go into building the profile. The
@@ -107,7 +107,7 @@ means writing one JSON file; see `docs/adding-a-language.md`.
 ## Privacy
 
 The corpus contains the full text of things you wrote. It lives under the
-path you set in `voiceprint.conf`, deliberately outside this repository, and
+path you set in `housestyle.conf`, deliberately outside this repository, and
 `.gitignore` is a second net in case something is ever written here by
 mistake. Sample passages — the one place actual text is meant to be shown to
 a model — are redacted first: configured names, mail addresses, links, phone

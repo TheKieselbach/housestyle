@@ -83,7 +83,7 @@ Everything, exhaustively:
 
 | Path | What | Contains |
 |---|---|---|
-| `voiceprint.conf` | your configuration | paths, names to mask, signature anchors |
+| `housestyle.conf` | your configuration | paths, names to mask, signature anchors |
 | `<ROOT>/corpus/` | collected texts | **your writing, in full — the sensitive one** |
 | `<ROOT>/metrics/` | measurements | counts and medians. No text |
 | `<ROOT>/style-profile.md` | the profile | numbers plus a few redacted passages |

@@ -2,13 +2,13 @@
 """Shared configuration and language-pack loading.
 
 Every path, name and word list that is specific to *you* lives in
-`voiceprint.conf`. Nothing personal belongs in the code.
+`housestyle.conf`. Nothing personal belongs in the code.
 """
 import json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-CONF = os.path.join(REPO, "voiceprint.conf")
+CONF = os.path.join(REPO, "housestyle.conf")
 
 
 def read_json(path):
@@ -42,7 +42,7 @@ def _parse(path):
     if not os.path.exists(path):
         sys.exit(
             f"No configuration found at {path}\n"
-            f"Copy voiceprint.conf.example to voiceprint.conf and fill it in.\n"
+            f"Copy housestyle.conf.example to housestyle.conf and fill it in.\n"
             f"See CONFIGURE-ME.md."
         )
     for raw in read_text(path).split("\n"):
@@ -76,7 +76,7 @@ def root():
     silently write your corpus somewhere it does not belong."""
     path = get("ROOT")
     if not path:
-        sys.exit("ROOT is not set in voiceprint.conf. See CONFIGURE-ME.md.")
+        sys.exit("ROOT is not set in housestyle.conf. See CONFIGURE-ME.md.")
     path = os.path.expanduser(path)
     if not os.path.isdir(path):
         sys.exit(f"ROOT does not exist: {path!r}\nCreate it first.")

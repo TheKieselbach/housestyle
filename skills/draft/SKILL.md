@@ -8,7 +8,7 @@ description: Writes mail, posts, proposals and other text in the user's own meas
 ## First: load the profile
 
 ```bash
-ROOT="$(grep '^ROOT=' <repo>/voiceprint.conf | cut -d= -f2-)"
+ROOT="$(grep '^ROOT=' <repo>/housestyle.conf | cut -d= -f2-)"
 cat "$ROOT/style-profile.md"
 ```
 
@@ -75,7 +75,7 @@ python3 <repo>/scripts/outlier_words.py DRAFT.txt
 Look at every hit. Technical terms and names may stay; replace the rest —
 and replace them with a word that occurs in the corpus, not with the nearest
 synonym from your own vocabulary. Anything the user marks as foreign goes
-into `BLOCKLIST` in `voiceprint.conf`.
+into `BLOCKLIST` in `housestyle.conf`.
 
 ## Second check: the numbers
 
@@ -86,9 +86,9 @@ the honest test:
 python3 -c "
 import json,sys
 t=open(sys.argv[1],encoding='utf-8').read()
-json.dump({'text':t},open('/tmp/voiceprint-draft.jsonl','w',encoding='utf-8'),ensure_ascii=False)
+json.dump({'text':t},open('/tmp/housestyle-draft.jsonl','w',encoding='utf-8'),ensure_ascii=False)
 " DRAFT.txt
-python3 <repo>/scripts/measure.py /tmp/voiceprint-draft.jsonl --tag draft
+python3 <repo>/scripts/measure.py /tmp/housestyle-draft.jsonl --tag draft
 ```
 
 Compare against `metrics/mail.json` or `metrics/web.json`. Three values carry

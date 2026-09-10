@@ -10,10 +10,10 @@ loads the finished profile, not this skill.
 
 ```bash
 cd <repo>/scripts
-ROOT="$(grep '^ROOT=' ../voiceprint.conf | cut -d= -f2-)"
+ROOT="$(grep '^ROOT=' ../housestyle.conf | cut -d= -f2-)"
 ```
 
-If `voiceprint.conf` does not exist yet, stop and walk the user through
+If `housestyle.conf` does not exist yet, stop and walk the user through
 `CONFIGURE-ME.md` first. Never guess a path.
 
 ## 1 · Transcripts
@@ -52,7 +52,7 @@ the configured root. Do it visibly, in its own command, so the user sees it
 happened.
 
 Then check whether signature remnants got through. Signature blocks change,
-and the anchors in `voiceprint.conf` need to follow:
+and the anchors in `housestyle.conf` need to follow:
 
 ```bash
 python3 -c "
@@ -111,7 +111,7 @@ python3 samples.py "$ROOT/corpus/mail.jsonl" --kind closer --n 6
 python3 samples.py "$ROOT/corpus/mail.jsonl" --kind whole  --n 5
 ```
 
-Names to mask belong in `REDACT` in `voiceprint.conf`.
+Names to mask belong in `REDACT` in `housestyle.conf`.
 
 ## Limits belong in the profile
 

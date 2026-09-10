@@ -64,7 +64,7 @@ def main():
     random.shuffle(pool)
 
     if not names:
-        print("!! REDACT is empty in voiceprint.conf — no names will be masked.\n",
+        print("!! REDACT is empty in housestyle.conf — no names will be masked.\n",
               file=sys.stderr)
     for s in pool[:n]:
         print("- " + redact(s, names, lang).replace("\n", " / "))

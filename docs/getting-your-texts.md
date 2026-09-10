@@ -144,4 +144,4 @@ for z,n in c.most_common(8): print(f'{n:4}x {z}')
 ```
 
 A line appearing fifty times is your signature, not your style. Add it to
-`SIGNATURE` in `voiceprint.conf` and run the collector again.
+`SIGNATURE` in `housestyle.conf` and run the collector again.

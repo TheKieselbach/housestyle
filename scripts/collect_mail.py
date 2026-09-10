@@ -202,7 +202,7 @@ def main():
           f"internal {sum(1 for s in out if s['kind']=='internal')}, "
           f"replies {sum(1 for s in out if s['reply'])}")
     if not config.get_list("SIGNATURE"):
-        print("\n!! SIGNATURE is empty in voiceprint.conf.")
+        print("\n!! SIGNATURE is empty in housestyle.conf.")
         print("   Your signature block is almost certainly still in the corpus.")
         print("   In the reference corpus that was 43 percent of all text.")
     print(f"-> {target}")
