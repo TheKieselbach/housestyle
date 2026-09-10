@@ -10,10 +10,94 @@ nobody made deliberately: every mail you ever sent, in someone else's
 infrastructure, because a draft needed to sound right.
 
 housestyle takes the other route. It measures your writing **locally** and
-produces numbers — sentence lengths, particle use, forms of address,
-punctuation habits, the words you actually reach for. Only the numbers, plus
-a handful of short redacted passages, go into building the profile. The
-corpus stays on your machine.
+produces numbers. Only the numbers, plus a handful of short redacted
+passages, go into building the profile. The corpus stays on your machine.
+
+---
+
+## What you actually get
+
+Ask any model to decline a proposal, and you get this:
+
+> Dear Mr Fisher,
+>
+> Thank you for your message and for the detailed proposal. Having carefully
+> reviewed the approach you outlined, I would like to share some thoughts.
+> While I appreciate the thinking behind it, I am concerned that the
+> associated costs may be considerable. I would therefore suggest that we
+> explore alternative avenues together. Please do not hesitate to reach out
+> should you have any questions.
+
+Competent. Polite. Not you. Give the same model your profile, and it writes
+to the measurements instead:
+
+> Hi Tom,
+>
+> too expensive. We tried it twice, it didn't work.
+> I'll look at it tomorrow and come back to you.
+>
+> Cheers
+
+Every difference traces to a number, not to taste:
+
+| Measurement | What it changed |
+|---|---|
+| Sentence median **7 words**, 48 % under six | The long, hedged sentences collapse |
+| Intensifiers and hedges at **0 per 1000 words** | "carefully", "considerable", "I would like to" go |
+| Greeting measured as **"Hi"**, sign-off as **"Cheers"** | No "Dear …", no "Please do not hesitate" |
+| Exclamation marks **0.0 per sentence** | None appear |
+| Informal address throughout | No formal register |
+
+That is the point of measuring rather than asking a model to guess: **you can
+see why a sentence changed.**
+
+## What the measurement looks like
+
+Real output from `measure.py`, abridged:
+
+```json
+{
+ "volume":   { "texts": 180, "sentences": 633, "words": 3917 },
+ "sentence_length_words": {
+    "median": 7, "mean": 6.3, "p10": 2.0, "p90": 9.0,
+    "short_under_6": 48, "long_over_25": 0 },
+ "punctuation_per_sentence": {
+    "comma": 0.39, "dash": 0.07, "colon": 0.15, "exclamation_mark": 0.0 },
+ "markers_per_1000_words": {
+    "hedges": 0.0, "intensifiers": 0.0, "questions": 12.3 },
+ "particles": [ ["also", 48, 12.25], ["gern", 40, 10.21], ["ja", 31, 7.91] ]
+}
+```
+
+From that plus a few short redacted passages you write `style-profile.md` —
+roughly one page. **That page is what you paste into your AI tool.** It says
+things like *"median 7 words; 48 percent of sentences under six; opens with
+Hi, closes with Cheers; intensifiers essentially absent — emphasis comes from
+negation, not from adverbs."*
+
+Every line of it is a claim you can check against a number. That is the
+difference from "write in a casual tone": a model can follow it, and you can
+tell when it did not.
+
+## How you use it day to day
+
+1. **Once a quarter** — refresh the corpus and remeasure. Ten minutes.
+2. **Once, then rarely** — paste `style-profile.md` into your tool's
+   instructions: ChatGPT custom instructions, a Claude Project, a Gem, your
+   `.cursorrules`. It stays there.
+3. **Per draft** — check it against your own vocabulary:
+   ```bash
+   housestyle outliers draft.txt
+   ```
+   It lists words whose stem you almost never use. In the reference corpus
+   one flagged word appeared **once** in 50,000 of the author's own words.
+   Not every hit is wrong — technical terms land there too. It is a list to
+   look at, not a list to delete.
+4. **When you rewrite a draft** — put the rewritten version back into the
+   corpus. Texts you approved are the best material there is, because they
+   are certainly in your voice.
+
+With the Claude Code plugin, steps 2 to 4 happen on their own.
 
 ---
 
