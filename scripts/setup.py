@@ -98,6 +98,27 @@ def do_check():
 
 
 # ───────────────────────────────────────────────────────────── uninstall
+# Paths a misconfigured ROOT must never let the uninstaller touch. It only
+# ever removes <ROOT>/corpus and <ROOT>/metrics — but a ROOT of "~" would then
+# delete a personal folder that happens to carry one of those names.
+def _refuse_to_delete(root):
+    if not root:
+        return None
+    real = os.path.realpath(root)
+    forbidden = {os.path.realpath(p) for p in
+                 ("/", "/Users", "/home", "/tmp", "/var", "/etc", "/opt",
+                  os.path.expanduser("~"),
+                  os.path.expanduser("~/Documents"), os.path.expanduser("~/Desktop"),
+                  os.path.expanduser("~/Downloads"))}
+    if real in forbidden:
+        return (f"ROOT is {real} — refusing to delete anything under it.\n"
+                f"That is a directory you did not create for this tool. Remove\n"
+                f"the corpus by hand if you are sure.")
+    if len(real.strip("/").split("/")) < 2:
+        return f"ROOT is {real} — too close to the filesystem root to touch."
+    return None
+
+
 def do_uninstall():
     print("This project creates exactly two things outside its own directory:\n")
     created = []
@@ -106,6 +127,11 @@ def do_uninstall():
     root = ""
     if os.path.exists(CONF):
         root = os.path.expanduser(config.get("ROOT") or "")
+        refusal = _refuse_to_delete(root)
+        if refusal:
+            print(f"  {CONF}\n      your configuration\n")
+            print(refusal)
+            return
     # The distinction between these two is the whole point of the project,
     # so the uninstaller had better get it right.
     for sub, what in (("corpus", "YOUR TEXTS — the sensitive one"),

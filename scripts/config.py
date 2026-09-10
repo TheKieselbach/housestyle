@@ -4,7 +4,7 @@
 Every path, name and word list that is specific to *you* lives in
 `housestyle.conf`. Nothing personal belongs in the code.
 """
-import json, os, sys
+import json, os, re, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
@@ -40,6 +40,37 @@ LANG_DIR = _first_existing(
     [os.path.join(REPO, "lang"), os.path.join(HERE, "lang")],
     default=os.path.join(HERE, "lang"),
 )
+
+
+# Secret-shaped strings that must never reach a corpus.
+#
+# The corpus is built from what you typed, and people type credentials into
+# chat windows. The project's whole claim is that your text stays local — but
+# a corpus is meant to be read back by a model eventually, through samples,
+# so a leaked key would travel exactly where it must not. Redaction happens
+# at collection time rather than at display time: the guardrail belongs where
+# the file is written, not where it is read.
+SECRET_PATTERNS = [
+    (r"\b[sp]k-[A-Za-z0-9_\-]{20,}", "[key]"),
+    (r"\bgh[pousr]_[A-Za-z0-9]{30,}", "[token]"),
+    (r"\bAKIA[0-9A-Z]{16}\b", "[aws-key]"),
+    (r"\beyJ[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]{10,}\.[A-Za-z0-9_\-]*", "[jwt]"),
+    (r"-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?-----END [A-Z ]*PRIVATE KEY-----", "[private-key]"),
+    (r"\bBearer\s+[A-Za-z0-9._\-]{20,}", "Bearer [token]"),
+    (r"(?i)\b(password|passwort|token|secret|api[_-]?key)(\s*[=:]\s*)\S{8,}", r"\1\2[redacted]"),
+    (r"\b(\w+)://[^\s:@/]+:[^\s:@/]+@", r"\1://[credentials]@"),
+]
+_SECRETS = [(re.compile(p), r) for p, r in SECRET_PATTERNS]
+
+
+def redact_secrets(text):
+    """Returns (text, number of redactions). Cheap, imperfect, and worth it —
+    it costs nothing on clean text and removes the worst case on dirty text."""
+    n = 0
+    for pattern, replacement in _SECRETS:
+        text, k = pattern.subn(replacement, text)
+        n += k
+    return text, n
 
 
 def read_json(path):

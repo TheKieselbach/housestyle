@@ -17,6 +17,9 @@ import config
 
 
 def redact(text, names, lang):
+    # Second net. The collectors already redact secrets when writing the
+    # corpus; this catches anything that predates that, or arrived by hand.
+    text, _ = config.redact_secrets(text)
     for name in names:
         text = re.sub(re.escape(name), "[name]", text, flags=re.I)
     text = re.sub(r"[\w.+-]+@[\w.-]+", "[mail]", text)

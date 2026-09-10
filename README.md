@@ -113,9 +113,17 @@ mistake. Sample passages — the one place actual text is meant to be shown to
 a model — are redacted first: configured names, mail addresses, links, phone
 numbers and amounts.
 
+**Secrets are redacted when the corpus is written.** People type API keys and
+passwords into chat windows, and transcripts keep them. Keys, tokens, private
+key blocks and credentials in URLs are replaced with placeholders before
+anything is stored — and again before any sample is shown to a model.
+
 Nothing in this project sends anything anywhere. There is no telemetry, no
 network call except the one in `collect_web.py`, which fetches URLs you pass
-it yourself.
+it yourself — and only over http and https, never `file://`.
+
+What was checked before release, and what it found, is in
+[`SECURITY.md`](SECURITY.md).
 
 ## Why it was built this way
 
@@ -131,9 +139,9 @@ numbers.
 python3 -W error::ResourceWarning -m unittest discover tests -v
 ```
 
-34 tests, no corpus and no setup needed. They are not coverage theatre — each
-one records a specific way an earlier version was wrong, including all three
-bugs listed in the changelog.
+52 tests, no corpus and no setup needed. They are not coverage theatre — each
+one records a specific way an earlier version was wrong, or a security
+constraint that must keep holding.
 
 ## Contributing
 

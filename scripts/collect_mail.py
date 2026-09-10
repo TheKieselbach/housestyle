@@ -157,12 +157,15 @@ def main():
 
     reader = read_graph if fmt == "graph" else read_mbox
     seen, out = set(), []
+    secrets_found = 0
     dropped = collections.Counter()
     total = 0
 
     for text, subject, when, recipients in reader(path):
         total += 1
         text = own_text(text, signature_re, signoff_re)
+        text, redacted = config.redact_secrets(text)
+        secrets_found += redacted
         # Deliberately low floor: "Done — what a mess." is 20 characters and
         # a strong style signal. Three words is enough to sieve out empty
         # forwards and bare confirmations.
@@ -201,6 +204,8 @@ def main():
     print(f"  external {sum(1 for s in out if s['kind']=='external')}, "
           f"internal {sum(1 for s in out if s['kind']=='internal')}, "
           f"replies {sum(1 for s in out if s['reply'])}")
+    if secrets_found:
+        print(f"\n!! {secrets_found} secret-shaped string(s) redacted before writing.")
     if not config.get_list("SIGNATURE"):
         print("\n!! SIGNATURE is empty in housestyle.conf.")
         print("   Your signature block is almost certainly still in the corpus.")

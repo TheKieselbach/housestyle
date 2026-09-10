@@ -93,6 +93,7 @@ def main():
     pattern = os.path.expanduser("~/.claude/projects/*/*.jsonl")
 
     seen, out = set(), []
+    secrets_found = 0
     for path in glob.glob(pattern):
         project = os.path.basename(os.path.dirname(path))
         with open(path, errors="ignore") as handle:
@@ -119,6 +120,8 @@ def main():
                 continue
             text = re.sub(r"[ \t]+", " ", strip_foreign(raw)).strip()
             text = re.sub(r"\n{3,}", "\n\n", text)
+            text, redacted = config.redact_secrets(text)
+            secrets_found += redacted
             if len(text) < 12:
                 continue
             key = hashlib.md5(text.encode()).hexdigest()
@@ -148,6 +151,10 @@ def main():
     print(f"{len(out)} messages, {chars:,} characters (~{chars // 6:,} words)")
     print(f"of those likely dictated: {len(dictated)} "
           f"({sum(s['characters'] for s in dictated):,} characters)")
+    if secrets_found:
+        print(f"\n!! {secrets_found} secret-shaped string(s) redacted before writing.")
+        print("   Credentials typed into a chat window end up in transcripts.")
+        print("   They are replaced with placeholders, not stored.")
     print(f"-> {target}")
 
 

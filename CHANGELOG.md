@@ -20,12 +20,25 @@ First public release in preparation. Not published yet.
   everything it will create before writing anything
 - Claude Code plugin layer (`profile` and `draft` skills), optional — the
   measurement works with any tool, or none
-- 34 tests, each recording a specific way an earlier version was wrong
+- 52 tests, each recording a specific way an earlier version was wrong or a
+  security constraint that must keep holding
 - Packaging: `pip install housestyle` with a `housestyle` command, alongside
   the git checkout and Claude Code plugin layouts. Configuration and language
   packs are resolved per layout rather than assumed
 - `.claude-plugin/marketplace.json`, so the repository can be added as a
   Claude Code plugin marketplace directly
+
+### Security
+- **Web collector accepted any URL scheme.** `urlopen` serves `file://`, so a
+  mistyped or pasted path read local files into the corpus. Now restricted to
+  http and https, re-checked after redirects, with a 10 MB cap.
+- **Collected text was not scanned for secrets.** Credentials typed into a chat
+  window live on in transcripts. Keys, tokens, private key blocks and
+  credentials in URLs are now redacted when the corpus is written, and again
+  before any sample is shown to a model.
+- **`--uninstall` trusted `ROOT`.** A `ROOT` pointing at a home or system
+  directory would have deleted folders the user created themselves. Now
+  refused.
 
 ### Fixed — carried over from the private original
 - **Blocklist compared raw words instead of stems.** An entry for an

@@ -11,10 +11,29 @@ That distinction matters more than it looks. Feed AI-drafted text into the
 base and the base contains exactly the vocabulary the outlier check is meant
 to catch — the check becomes worthless while still looking like it works.
 """
-import sys, os, re, json, html, hashlib, urllib.request
+import sys, os, re, json, html, hashlib, urllib.request, urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import config
+
+
+# urllib happily serves file:// and ftp:// — `urlopen("file:///etc/hosts")`
+# returns the file. For a tool whose job is to collect text into a corpus that
+# is worth exactly one allowlist: a mistyped or pasted path must not turn into
+# local file contents sitting in your corpus.
+ALLOWED_SCHEMES = ("http", "https")
+MAX_BYTES = 10 * 1024 * 1024
+
+
+def check_url(url):
+    """Returns an error string, or None if the URL is acceptable."""
+    parsed = urllib.parse.urlparse(url)
+    if parsed.scheme.lower() not in ALLOWED_SCHEMES:
+        return (f"refused: scheme {parsed.scheme or '(none)'!r} is not allowed "
+                f"(only {', '.join(ALLOWED_SCHEMES)})")
+    if not parsed.netloc:
+        return "refused: no host in URL"
+    return None
 
 
 def text_from_html(raw):
@@ -40,9 +59,23 @@ def main():
     target = config.corpus_path("web.jsonl")
     out, seen = [], set()
     for url in urls:
+        problem = check_url(url)
+        if problem:
+            print(f"!! {url}: {problem}")
+            continue
         try:
             req = urllib.request.Request(url, headers={"User-Agent": "housestyle/1.0"})
-            raw = urllib.request.urlopen(req, timeout=30).read().decode("utf-8", "ignore")
+            with urllib.request.urlopen(req, timeout=30) as response:
+                # A redirect must not smuggle in another scheme.
+                landed = check_url(response.geturl())
+                if landed:
+                    print(f"!! {url}: redirected to something {landed}")
+                    continue
+                raw = response.read(MAX_BYTES + 1)
+            if len(raw) > MAX_BYTES:
+                print(f"!! {url}: larger than {MAX_BYTES // 1024 // 1024} MB, skipped")
+                continue
+            raw = raw.decode("utf-8", "ignore")
         except Exception as e:
             print(f"!! {url}: {e}")
             continue
