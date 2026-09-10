@@ -1,0 +1,12 @@
+# The corpus never belongs in this repository. It lives under the path you
+# set in voiceprint.conf, outside the repo. These lines are a safety net in
+# case a result is ever written here by accident.
+corpus/
+metrics/
+*.corpus.jsonl
+*.raw.json
+samples-*.md
+voiceprint.conf
+__pycache__/
+*.pyc
+.DS_Store

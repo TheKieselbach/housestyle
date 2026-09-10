@@ -1,0 +1,49 @@
+# ─────────────────────────────────────────────────────────────────────────
+# voiceprint configuration
+#
+# Copy this file to `voiceprint.conf` (same directory) and fill it in.
+# `voiceprint.conf` is git-ignored — your paths and names stay local.
+# ─────────────────────────────────────────────────────────────────────────
+
+# Where the corpus and the finished profile live.
+#
+# Put this OUTSIDE this repository. The corpus contains the full text of
+# things you have written — sent mail, chat messages, drafts. That is your
+# material, and it must never end up in version control.
+#
+# No trailing slash.
+ROOT=
+
+# Language of the corpus. Selects the word lists under lang/.
+# Shipped: de, en. See docs/adding-a-language.md to add your own.
+LANG=de
+
+# ─── Redaction ───────────────────────────────────────────────────────────
+# Names replaced with [Name] before any sample text is shown to a model.
+# Comma-separated, substring match. Put clients, colleagues and third
+# parties here. You do not need to list yourself.
+REDACT=
+
+# ─── Signature anchors ───────────────────────────────────────────────────
+# Lines that mark the start of your automatic mail signature. Everything
+# from the first match onward is dropped before measuring.
+#
+# This matters more than it looks: in the reference corpus the signature
+# accounted for 43 percent of all mail text. Measuring it means measuring
+# your business card, not your language.
+#
+# One entry per line as a regular expression, indented under the key.
+# Typical anchors: the first line of your signature block, your name line,
+# your company name, your street address, any standing marketing line.
+SIGNATURE=
+
+# ─── Internal domains ────────────────────────────────────────────────────
+# Mail to these domains is tagged "internal", everything else "external".
+# Registers differ sharply between the two, and the profile separates them.
+# Comma-separated, substring match.
+INTERNAL=
+
+# ─── Words you have rejected ─────────────────────────────────────────────
+# Words a model keeps proposing that you know are not yours. Comma-
+# separated, stem match. The list grows every time you correct a draft.
+BLOCKLIST=
