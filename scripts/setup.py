@@ -82,8 +82,11 @@ def do_check():
         root = os.path.expanduser(root)
         for sub in ("corpus", "metrics"):
             path = os.path.join(root, sub)
-            files = glob.glob(os.path.join(path, "*")) if os.path.isdir(path) else []
-            print(f"       {sub}/ {len(files)} files" if files else f"       {sub}/ empty or missing")
+            if not os.path.isdir(path):
+                print(f"       {sub}/ missing")
+                continue
+            files = glob.glob(os.path.join(path, "*"))
+            print(f"       {sub}/ {len(files)} file(s)" if files else f"       {sub}/ exists, empty")
     elif root:
         print("       !!   ROOT does not exist")
     print(f"       LANG = {config.get('LANG') or '(not set)'}")
@@ -104,11 +107,14 @@ def do_uninstall():
         sys.path.insert(0, HERE)
         import config
         root = os.path.expanduser(config.get("ROOT") or "")
-    for sub in ("corpus", "metrics"):
+    # The distinction between these two is the whole point of the project,
+    # so the uninstaller had better get it right.
+    for sub, what in (("corpus", "YOUR TEXTS — the sensitive one"),
+                      ("metrics", "measured numbers, no text")):
         if root and os.path.isdir(os.path.join(root, sub)):
             path = os.path.join(root, sub)
             size = sum(os.path.getsize(f) for f in glob.glob(os.path.join(path, "*")) if os.path.isfile(f))
-            created.append((path, f"{size // 1024} KB — YOUR TEXTS, this is the sensitive one"))
+            created.append((path, f"{size // 1024} KB — {what}"))
     if not created:
         print("  Nothing found. Nothing to remove.")
     for path, what in created:
