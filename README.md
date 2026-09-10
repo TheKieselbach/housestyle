@@ -1,5 +1,10 @@
 # housestyle
 
+[![tests](https://github.com/TheKieselbach/housestyle/actions/workflows/ci.yml/badge.svg)](https://github.com/TheKieselbach/housestyle/actions/workflows/ci.yml)
+[![Python 3.9+](https://img.shields.io/badge/python-3.9%2B-blue)](https://www.python.org/downloads/)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache--2.0-green)](LICENSE)
+[![dependencies: none](https://img.shields.io/badge/dependencies-none-brightgreen)](INSTALL.md)
+
 **Learn your own writing voice from your own texts — without sending those
 texts to a model.**
 
@@ -12,6 +17,15 @@ infrastructure, because a draft needed to sound right.
 housestyle takes the other route. It measures your writing **locally** and
 produces numbers. Only the numbers, plus a handful of short redacted
 passages, go into building the profile. The corpus stays on your machine.
+
+**Who this is for:** anyone whose writing carries their own name — consultants,
+founders, freelancers, people who send a lot of mail that has to sound like
+them. Also anyone under a duty of confidentiality who would rather not paste
+their sent folder into a chat window.
+
+**Who it is not for:** teams looking for a shared house tone. That is a
+different problem — this measures one person, and mixing several writers
+produces an average nobody actually writes like.
 
 ---
 

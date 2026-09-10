@@ -1,0 +1,10 @@
+# Ausnahmen für den Sicherheitscheck.
+# Format:  pfadmuster:Musterbezeichnung:Begründung
+# Die Begründung ist Pflicht — eine Ausnahme ohne Grund ist ein Durchwinken
+# mit Extraschritten.
+
+CONFIGURE-ME.md:Postleitzahl mit Ort:Erfundene Beispieladresse (Springfield) in der Konfigurationsanleitung
+CONFIGURE-ME.md:Deutsche Anschrift:Erfundene Beispieladresse in der Konfigurationsanleitung
+scripts/collect_web.py:Netzabruf ohne Schemapruefung:Schema wird in check_url() geprueft, vor und nach Umleitungen, mit Test in tests/test_security.py
+scripts/setup.py:Rekursives Loeschen:Nur nach Eingabe von DELETE, mit Schutz gegen Heimat- und Systemverzeichnisse in _refuse_to_delete()
+tests/test_security.py:*:Testdaten. Enthaelt absichtlich geheimnisfoermige Zeichenfolgen (AWS-Dokumentationsbeispiel, jwt.io-Beispieltoken)
