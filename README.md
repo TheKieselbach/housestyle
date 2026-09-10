@@ -70,7 +70,20 @@ Real output from `measure.py`, abridged:
 ```
 
 From that plus a few short redacted passages you write `style-profile.md` —
-roughly one page. **That page is what you paste into your AI tool.** It says
+roughly one page. **That page is what you paste into your AI tool.**
+
+Writing it is the one step a model does for you. With the Claude Code plugin
+the `profile` skill does it. Without it, paste the metrics file into whatever
+model you use and ask:
+
+> Here are measurements of my writing, taken from my own texts, plus a few
+> short sample passages. Write a one-page style profile I can give to a model
+> so it writes like me. Every statement must trace back to one of these
+> numbers — no "clear and concise", but "median 7 words, 48 percent of
+> sentences under six". End with a short checklist for reviewing a draft.
+
+Note what does **not** happen here: your corpus is not in that prompt. Only
+counts, medians and a handful of redacted lines. It says
 things like *"median 7 words; 48 percent of sentences under six; opens with
 Hi, closes with Cheers; intensifiers essentially absent — emphasis comes from
 negation, not from adverbs."*
