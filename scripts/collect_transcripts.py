@@ -95,7 +95,9 @@ def main():
     seen, out = set(), []
     for path in glob.glob(pattern):
         project = os.path.basename(os.path.dirname(path))
-        for line in open(path, errors="ignore"):
+        with open(path, errors="ignore") as handle:
+            lines = handle.readlines()
+        for line in lines:
             try:
                 d = json.loads(line)
             except ValueError:

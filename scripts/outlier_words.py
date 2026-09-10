@@ -44,6 +44,7 @@ def make_stem(lang):
     length = cfg.get("length", 6)
     mapping = cfg.get("normalize", {})
     suffixes = sorted(cfg.get("suffixes", []), key=len, reverse=True)
+    prefixes = sorted(cfg.get("prefixes", []), key=len, reverse=True)
     min_length = cfg.get("min_length", 4)
 
     def stem(word):
@@ -53,6 +54,14 @@ def make_stem(lang):
         for suf in suffixes:
             if w.endswith(suf) and len(w) - len(suf) >= min_length:
                 w = w[:-len(suf)]
+                break
+        # Participle prefixes, so German "getragen" reaches the same stem as
+        # "tragen". This over-merges a few unrelated words that happen to
+        # start with the prefix; that is the accepted cost, and it errs
+        # towards flagging less rather than flagging wrongly.
+        for pre in prefixes:
+            if w.startswith(pre) and len(w) - len(pre) >= min_length:
+                w = w[len(pre):]
                 break
         return w[:length]
     return stem
@@ -64,8 +73,8 @@ def corpus_counts(root, lang, stem):
     for path in glob.glob(os.path.join(root, "corpus", "*.jsonl")):
         if os.path.basename(path) not in OWN:
             continue
-        for line in open(path, encoding="utf-8"):
-            for w in re.findall(lang["word_pattern"], json.loads(line)["text"]):
+        for record in config.read_jsonl(path):
+            for w in re.findall(lang["word_pattern"], record["text"]):
                 counts[stem(w)] += 1
                 total += 1
     return counts, total
@@ -87,7 +96,7 @@ def main():
                  f"under {os.path.join(config.root(), 'corpus')}.")
     blocked_words = [w.strip().lower() for w in config.get_list("BLOCKLIST")]
 
-    text = open(argv[0], encoding="utf-8").read()
+    text = config.read_text(argv[0])
     words = re.findall(lang["word_pattern"], text)
 
     # The blocklist is compared on stems, not raw words. Comparing raw

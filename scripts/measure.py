@@ -21,11 +21,17 @@ import config
 
 
 def split_sentences(text, abbreviations):
-    """Splits into sentences, protecting abbreviations that end in a period.
-    Without this, "e.g." ends a sentence and the length statistics collapse."""
+    """Splits into sentences, protecting abbreviations that contain periods.
+
+    Every period in the abbreviation has to be protected, not just the last
+    one. Guarding only the trailing period leaves the inner one intact, and
+    German "z. B." then ends a sentence after the "z." — which silently
+    shortened every measured sentence containing an abbreviation.
+    """
     if abbreviations:
         guard = "|".join(abbreviations)
-        text = re.sub(rf"\b({guard})\.", r"\1<P>", text)
+        text = re.sub(rf"\b(?:{guard})\.?",
+                      lambda m: m.group(0).replace(".", "<P>"), text)
     parts = re.split(r"(?<=[.!?])\s+|\n{2,}", text)
     return [p.replace("<P>", ".").strip() for p in parts if len(p.strip()) > 1]
 
@@ -120,8 +126,7 @@ def main():
     lang = config.language()
     texts = []
     for path in argv:
-        for line in open(path, encoding="utf-8"):
-            d = json.loads(line)
+        for d in config.read_jsonl(path):
             if d.get("text", "").strip():
                 texts.append(d["text"])
     if not texts:
@@ -130,7 +135,7 @@ def main():
     result = analyse(texts, tag, lang)
     target = os.path.join(config.root(), "metrics", f"{tag}.json")
     os.makedirs(os.path.dirname(target), exist_ok=True)
-    json.dump(result, open(target, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    config.write_json(target, result)
     json.dump(result, sys.stdout, ensure_ascii=False, indent=1)
     print(f"\n-> {target}", file=sys.stderr)
 

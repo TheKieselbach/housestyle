@@ -11,6 +11,30 @@ REPO = os.path.dirname(HERE)
 CONF = os.path.join(REPO, "voiceprint.conf")
 
 
+def read_json(path):
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def read_jsonl(path):
+    """Yields one parsed record per line. Used by every collector and reader,
+    so the file handle is closed in exactly one place."""
+    with open(path, encoding="utf-8") as f:
+        for line in f:
+            if line.strip():
+                yield json.loads(line)
+
+
+def read_text(path, **kw):
+    with open(path, encoding=kw.pop("encoding", "utf-8"), **kw) as f:
+        return f.read()
+
+
+def write_json(path, data):
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=1)
+
+
 def _parse(path):
     """Reads a simple KEY=value file. Indented lines continue the previous
     key as a list entry, which is how multi-line keys like SIGNATURE work."""
@@ -21,8 +45,8 @@ def _parse(path):
             f"Copy voiceprint.conf.example to voiceprint.conf and fill it in.\n"
             f"See CONFIGURE-ME.md."
         )
-    for raw in open(path, encoding="utf-8"):
-        line = raw.rstrip("\n")
+    for raw in read_text(path).split("\n"):
+        line = raw.rstrip("\r")
         if not line.strip() or line.lstrip().startswith("#"):
             continue
         if line[0].isspace() and key:
@@ -75,4 +99,4 @@ def language():
             if f.endswith(".json")))
         sys.exit(f"No language pack for {code!r}. Available: {available}\n"
                  f"See docs/adding-a-language.md.")
-    return json.load(open(path, encoding="utf-8"))
+    return read_json(path)

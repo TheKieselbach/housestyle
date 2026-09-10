@@ -46,7 +46,7 @@ def main():
     greeting = re.compile(lang["greeting"], re.I | re.M)
     signoff = re.compile(lang["signoff"], re.I | re.M)
 
-    texts = [json.loads(l)["text"] for l in open(argv[0], encoding="utf-8")]
+    texts = [d["text"] for d in config.read_jsonl(argv[0])]
     random.seed(7)          # same corpus, same samples — reproducible runs
     pool = []
     for t in texts:

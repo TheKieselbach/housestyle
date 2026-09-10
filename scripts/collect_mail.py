@@ -100,7 +100,7 @@ def own_text(text, signature_re, signoff_re):
 
 
 def read_graph(path):
-    raw = json.load(open(path, encoding="utf-8"))
+    raw = config.read_json(path)
     items = raw.get("value", raw if isinstance(raw, list) else [])
     for m in items:
         body = m.get("body") or {}

@@ -54,7 +54,10 @@
    "t",
    "r"
   ],
-  "min_length": 4
+  "min_length": 4,
+  "prefixes": [
+   "ge"
+  ]
  },
  "stopwords": [
   "der",
@@ -210,7 +213,7 @@
  "markers": {
   "hedges": "\\b(eigentlich|einfach|quasi|halt|irgendwie|relativ|ziemlich|glaube ich|denke ich|vermutlich|wohl)\\b",
   "intensifiers": "\\b(total|echt|super|mega|richtig|sehr|absolut|voellig|völlig|extrem|deutlich)\\b",
-  "softener mal": "\\b(mal|nochmal|einfach mal|kurz mal)\\b",
+  "softeners": "\\b(mal|nochmal|einfach mal|kurz mal)\\b",
   "connectives": "\\b(also|deshalb|deswegen|dadurch|sprich|das hei(ss|ß)t|im Grunde|insofern|somit|folglich|entsprechend)\\b",
   "contrast": "\\b(aber|allerdings|jedoch|trotzdem|dennoch|andererseits)\\b",
   "subjunctive": "\\b(w(ue|ü)rde[nst]?|w(ae|ä)re[nst]?|h(ae|ä)tte[nst]?|k(oe|ö)nnte[nst]?|sollte[nst]?|m(ue|ü)sste[nst]?)\\b",

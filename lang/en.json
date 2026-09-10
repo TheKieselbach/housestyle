@@ -46,7 +46,8 @@
    "er",
    "s"
   ],
-  "min_length": 4
+  "min_length": 4,
+  "prefixes": []
  },
  "stopwords": [
   "the",
@@ -173,7 +174,7 @@
  "markers": {
   "hedges": "\\b(actually|basically|kind of|sort of|somewhat|fairly|rather|probably|I think|I guess|I suppose|maybe|perhaps)\\b",
   "intensifiers": "\\b(really|very|super|totally|absolutely|extremely|highly|massively|deeply|hugely)\\b",
-  "softener just": "\\b(just|quickly|briefly|a quick)\\b",
+  "softeners": "\\b(just|quickly|briefly|a quick)\\b",
   "connectives": "\\b(so|therefore|thus|hence|which means|in other words|that said|accordingly|consequently)\\b",
   "contrast": "\\b(but|however|although|though|nevertheless|nonetheless|on the other hand|whereas)\\b",
   "subjunctive": "\\b(would|could|should|might|were to|had to)\\b",
