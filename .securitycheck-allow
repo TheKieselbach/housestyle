@@ -1,10 +1,11 @@
 # Exceptions for the security check.
 # Format:  path-glob:pattern-name:reason
-# The reason is mandatory — an exception without one is waving something
+#
+# The reason is mandatory. An exception without one is waving something
 # through with extra steps, and leaves nothing for a later reader to judge.
 
-CONFIGURE-ME.md:Postleitzahl mit Ort:Invented example address (Springfield) in the configuration guide
-CONFIGURE-ME.md:Deutsche Anschrift:Invented example address in the configuration guide
-scripts/collect_web.py:Netzabruf ohne Schemapruefung:Scheme is validated in check_url(), before and after redirects, with a test in tests/test_security.py
-scripts/setup.py:Rekursives Loeschen:Only after typing DELETE, guarded against home and system directories by _refuse_to_delete()
-tests/test_security.py:*:Test fixtures. Deliberately contains secret-shaped strings — the AWS documentation example and the public jwt.io sample token
+CONFIGURE-ME.md:postcode-and-town:Invented example address (Springfield) in the configuration guide
+CONFIGURE-ME.md:street-address:Invented example address in the configuration guide
+scripts/collect_web.py:fetch-without-scheme-check:Scheme is validated in check_url(), before and after redirects, with a test in tests/test_security.py
+scripts/setup.py:recursive-delete:Only after typing DELETE, guarded against home and system directories by _refuse_to_delete()
+tests/test_security.py:*:Test fixtures. Deliberately contains secret-shaped strings - the AWS documentation example and the public jwt.io sample token
