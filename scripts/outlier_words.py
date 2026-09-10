@@ -73,11 +73,17 @@ def main():
     text = open(argv[0], encoding="utf-8").read()
     words = re.findall(lang["word_pattern"], text)
 
+    # The blocklist is compared on stems, not raw words. Comparing raw
+    # would miss exactly the inflected forms the list exists for: with
+    # "tragen" on the list, German "trägt" slipped through into the
+    # statistical suspects instead of being flagged as rejected.
+    blocked_stems = {stem(b) for b in blocked_words}
+
     suspect, blocked = {}, []
     for w in words:
         if len(w) < 5:
             continue          # short function words say nothing about style
-        if any(w.lower().startswith(b[:6]) for b in blocked_words):
+        if stem(w) in blocked_stems:
             blocked.append(w); continue
         n = counts[stem(w)]
         if n <= threshold:
