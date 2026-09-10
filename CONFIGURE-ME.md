@@ -45,7 +45,7 @@ Indent one expression per line:
 
 ```
 SIGNATURE=
-  Kind regards from Hamburg
+  Kind regards from Springfield
   Jane Doe[ \t]*[-(]
   Mail:[ \t]*jane\.doe
   Example Consulting Ltd|Main Street 1|12345 Springfield

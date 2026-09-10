@@ -10,3 +10,4 @@ voiceprint.conf
 __pycache__/
 *.pyc
 .DS_Store
+STATUS.md

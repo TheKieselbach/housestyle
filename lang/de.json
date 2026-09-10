@@ -18,6 +18,9 @@
  "stem": {
   "length": 6,
   "normalize": {
+   "ae": "a",
+   "oe": "o",
+   "ue": "u",
    "ä": "a",
    "ö": "o",
    "ü": "u",
