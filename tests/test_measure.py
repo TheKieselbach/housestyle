@@ -5,8 +5,13 @@ sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(
 import measure
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DE = json.load(open(os.path.join(REPO, "lang", "de.json"), encoding="utf-8"))
-EN = json.load(open(os.path.join(REPO, "lang", "en.json"), encoding="utf-8"))
+
+
+def _load(path):
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+DE = _load(os.path.join(REPO, "lang", "de.json"))
+EN = _load(os.path.join(REPO, "lang", "en.json"))
 
 
 class SentenceSplitting(unittest.TestCase):

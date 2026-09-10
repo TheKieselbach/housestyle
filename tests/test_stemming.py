@@ -3,11 +3,16 @@ and were only found when this public port was smoke-tested."""
 import json, os, sys, unittest
 
 REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def _load(path):
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
 sys.path.insert(0, os.path.join(REPO, "scripts"))
 import outlier_words
 
-DE = json.load(open(os.path.join(REPO, "lang", "de.json"), encoding="utf-8"))
-EN = json.load(open(os.path.join(REPO, "lang", "en.json"), encoding="utf-8"))
+DE = _load(os.path.join(REPO, "lang", "de.json"))
+EN = _load(os.path.join(REPO, "lang", "en.json"))
 
 
 class GermanStemming(unittest.TestCase):
@@ -60,14 +65,14 @@ class LanguagePacks(unittest.TestCase):
         for path in sorted(os.listdir(os.path.join(REPO, "lang"))):
             if not path.endswith(".json"):
                 continue
-            pack = json.load(open(os.path.join(REPO, "lang", path), encoding="utf-8"))
+            pack = _load(os.path.join(REPO, "lang", path))
             self.assertTrue(required <= set(pack), f"{path} is missing {required - set(pack)}")
             self.assertEqual(pack["code"], path[:-5], f"{path}: code does not match filename")
 
     def test_marker_names_match_across_packs(self):
         """Profiles are compared across languages. Diverging marker names would
         make that silently meaningless."""
-        packs = [json.load(open(os.path.join(REPO, "lang", f), encoding="utf-8"))
+        packs = [_load(os.path.join(REPO, "lang", f))
                  for f in os.listdir(os.path.join(REPO, "lang")) if f.endswith(".json")]
         names = [set(p["markers"]) for p in packs]
         self.assertTrue(all(n == names[0] for n in names),
@@ -78,7 +83,7 @@ class LanguagePacks(unittest.TestCase):
         for f in os.listdir(os.path.join(REPO, "lang")):
             if not f.endswith(".json"):
                 continue
-            pack = json.load(open(os.path.join(REPO, "lang", f), encoding="utf-8"))
+            pack = _load(os.path.join(REPO, "lang", f))
             re.compile(pack["word_pattern"]); re.compile(pack["greeting"]); re.compile(pack["signoff"])
             for name, pattern in pack["markers"].items():
                 re.compile(pattern)
