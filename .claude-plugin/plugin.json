@@ -1,0 +1,11 @@
+{
+  "name": "voiceprint",
+  "displayName": "voiceprint",
+  "description": "Learns your writing voice from your own texts - Claude Code transcripts, sent mail, published articles - and writes in it. The measurement runs locally over metrics; raw text never leaves the machine.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Jonas Kieselbach"
+  },
+  "license": "Apache-2.0",
+  "keywords": ["style", "voice", "tone", "writing", "privacy", "local", "corpus"]
+}
