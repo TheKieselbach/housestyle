@@ -25,6 +25,17 @@ a tree of packages you did not read. Everything here is `re`, `json`,
 
 ## Install
 
+### As a Claude Code plugin
+
+```
+/plugin marketplace add <owner>/housestyle
+/plugin install housestyle@housestyle
+```
+
+Then run the setup assistant once, from the plugin directory.
+
+### As a plain checkout — any tool, or none
+
 ```bash
 git clone <this repository>
 cd housestyle
