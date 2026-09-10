@@ -11,3 +11,6 @@ __pycache__/
 *.pyc
 .DS_Store
 STATUS.md
+dist/
+build/
+*.egg-info/

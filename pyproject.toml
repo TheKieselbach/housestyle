@@ -1,0 +1,49 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "housestyle"
+version = "0.1.0"
+description = "Learn your own writing voice from your own texts, measured locally - raw text never leaves the machine."
+readme = "README.md"
+requires-python = ">=3.9"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+authors = [{ name = "Jonas Kieselbach" }]
+keywords = ["writing", "style", "voice", "privacy", "local", "corpus", "llm"]
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Environment :: Console",
+  "Intended Audience :: End Users/Desktop",
+  "Natural Language :: English",
+  "Natural Language :: German",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.9",
+  "Programming Language :: Python :: 3.13",
+  "Topic :: Text Processing :: Linguistic",
+]
+
+# No dependencies, on purpose. A tool that reads your sent mail should not
+# pull in a package tree you have not read.
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/TheKieselbach/housestyle"
+Source = "https://github.com/TheKieselbach/housestyle"
+Changelog = "https://github.com/TheKieselbach/housestyle/blob/main/CHANGELOG.md"
+Issues = "https://github.com/TheKieselbach/housestyle/issues"
+
+[project.scripts]
+housestyle = "housestyle.cli:main"
+
+[tool.setuptools]
+packages = ["housestyle", "housestyle.lang"]
+
+[tool.setuptools.package-dir]
+housestyle = "scripts"
+"housestyle.lang" = "lang"
+
+[tool.setuptools.package-data]
+"housestyle.lang" = ["*.json"]

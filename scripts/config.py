@@ -8,7 +8,38 @@ import json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.dirname(HERE)
-CONF = os.path.join(REPO, "housestyle.conf")
+
+
+# The same code runs from two layouts and neither is the "real" one:
+#
+#   checkout / Claude Code plugin   <repo>/scripts/, <repo>/lang/, config in <repo>/
+#   pip install                     site-packages/housestyle/, config in ~/.config/
+#
+# A checkout is recognised by pyproject.toml sitting next to the package. Both
+# layouts are searched; where a *new* file gets written depends on which one
+# this is, because writing a config into site-packages would be wrong.
+IS_CHECKOUT = os.path.exists(os.path.join(REPO, "pyproject.toml"))
+
+USER_CONF = os.path.expanduser("~/.config/housestyle/housestyle.conf")
+REPO_CONF = os.path.join(REPO, "housestyle.conf")
+
+
+def _first_existing(candidates, default):
+    for path in candidates:
+        if path and os.path.exists(path):
+            return path
+    return default
+
+
+CONF = _first_existing(
+    [os.environ.get("HOUSESTYLE_CONF"), REPO_CONF, USER_CONF],
+    default=REPO_CONF if IS_CHECKOUT else USER_CONF,
+)
+
+LANG_DIR = _first_existing(
+    [os.path.join(REPO, "lang"), os.path.join(HERE, "lang")],
+    default=os.path.join(HERE, "lang"),
+)
 
 
 def read_json(path):
@@ -92,11 +123,10 @@ def corpus_path(name):
 def language():
     """Loads the word lists for the configured language."""
     code = get("LANG", "de") or "de"
-    path = os.path.join(REPO, "lang", f"{code}.json")
+    path = os.path.join(LANG_DIR, f"{code}.json")
     if not os.path.exists(path):
         available = ", ".join(sorted(
-            f[:-5] for f in os.listdir(os.path.join(REPO, "lang"))
-            if f.endswith(".json")))
+            f[:-5] for f in os.listdir(LANG_DIR) if f.endswith(".json")))
         sys.exit(f"No language pack for {code!r}. Available: {available}\n"
                  f"See docs/adding-a-language.md.")
     return read_json(path)

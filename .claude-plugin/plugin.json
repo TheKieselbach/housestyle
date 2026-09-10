@@ -7,5 +7,15 @@
     "name": "Jonas Kieselbach"
   },
   "license": "Apache-2.0",
-  "keywords": ["style", "voice", "tone", "writing", "privacy", "local", "corpus"]
+  "keywords": [
+    "style",
+    "voice",
+    "tone",
+    "writing",
+    "privacy",
+    "local",
+    "corpus"
+  ],
+  "category": "productivity",
+  "homepage": "https://github.com/TheKieselbach/housestyle"
 }

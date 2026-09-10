@@ -8,7 +8,10 @@
       "name": "housestyle",
       "source": "./",
       "description": "Learn your own writing voice from your own texts, measured locally - raw text never leaves the machine.",
-      "category": "writing"
+      "category": "productivity",
+      "author": {
+        "name": "Jonas Kieselbach"
+      }
     }
   ]
 }

@@ -11,9 +11,12 @@ Usage:  python3 scripts/setup.py [--check] [--uninstall]
 import os, sys, shutil, platform, glob
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-REPO = os.path.dirname(HERE)
-CONF = os.path.join(REPO, "housestyle.conf")
-LANGS = sorted(f[:-5] for f in os.listdir(os.path.join(REPO, "lang")) if f.endswith(".json"))
+sys.path.insert(0, HERE)
+import config                                       # noqa: E402
+
+REPO = config.REPO
+CONF = config.CONF
+LANGS = sorted(f[:-5] for f in os.listdir(config.LANG_DIR) if f.endswith(".json"))
 
 TRANSCRIPTS = os.path.expanduser("~/.claude/projects")
 
@@ -74,8 +77,6 @@ def do_check():
         print(f"  --   {CONF} does not exist yet — run without --check")
         return
     print(f"  ok   {CONF}")
-    sys.path.insert(0, HERE)
-    import config
     root = config.get("ROOT")
     print(f"       ROOT = {root or '(not set)'}")
     if root and os.path.isdir(os.path.expanduser(root)):
@@ -104,8 +105,6 @@ def do_uninstall():
         created.append((CONF, "your configuration"))
     root = ""
     if os.path.exists(CONF):
-        sys.path.insert(0, HERE)
-        import config
         root = os.path.expanduser(config.get("ROOT") or "")
     # The distinction between these two is the whole point of the project,
     # so the uninstaller had better get it right.
@@ -199,6 +198,7 @@ def do_setup():
         print("Nothing written.")
         return
 
+    os.makedirs(os.path.dirname(CONF), exist_ok=True)
     os.makedirs(os.path.join(root, "corpus"), exist_ok=True)
     os.makedirs(os.path.join(root, "metrics"), exist_ok=True)
     with open(CONF, "w", encoding="utf-8") as f:
@@ -215,18 +215,24 @@ def do_setup():
 
     print(f"\nDone.\n\n  {CONF}\n  {root}/corpus\n  {root}/metrics")
     print("\nNext:\n")
+    # Tell people the command that actually works for their layout.
+    run = "python3 scripts/{}.py" if config.IS_CHECKOUT else "housestyle {}"
     if os.path.isdir(TRANSCRIPTS):
-        print("  python3 scripts/collect_transcripts.py")
-        print(f"  python3 scripts/measure.py {root}/corpus/transcripts.jsonl --tag transcripts")
+        print(f"  {run.format('collect_transcripts' if config.IS_CHECKOUT else 'transcripts')}")
+        print(f"  {run.format('measure')} {root}/corpus/transcripts.jsonl --tag transcripts")
     else:
         print("  Get a corpus first — see docs/getting-your-texts.md")
-    print("\n  python3 scripts/setup.py --check    to verify later")
+    print(f"\n  {run.format('setup')} --check    to verify later")
 
 
-if __name__ == "__main__":
+def main():
     if "--check" in sys.argv:
         do_check()
     elif "--uninstall" in sys.argv:
         do_uninstall()
     else:
         do_setup()
+
+
+if __name__ == "__main__":
+    main()

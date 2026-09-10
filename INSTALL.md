@@ -34,7 +34,18 @@ a tree of packages you did not read. Everything here is `re`, `json`,
 
 Then run the setup assistant once, from the plugin directory.
 
-### As a plain checkout — any tool, or none
+### With pip — any tool, or none
+
+```bash
+pip install housestyle
+housestyle setup
+```
+
+Gives you the `housestyle` command and the measurement. Configuration lands in
+`~/.config/housestyle/housestyle.conf`. The Claude Code skills are **not**
+included this way — pip installs a command-line tool, not a plugin.
+
+### As a plain checkout
 
 ```bash
 git clone <this repository>
@@ -125,7 +136,19 @@ registered anywhere to clean up.
 ## Verify it works
 
 ```bash
-python3 -m unittest discover tests -v
+python3 -W error::ResourceWarning -m unittest discover tests -v
 ```
 
-No corpus needed; the tests run against fixtures.
+No corpus and no setup needed. If they need either, that is a bug.
+
+## Where things live in each layout
+
+| | checkout / plugin | pip install |
+|---|---|---|
+| Code | `scripts/` | `site-packages/housestyle/` |
+| Language packs | `lang/` | inside the package |
+| Configuration | `housestyle.conf` in the repo | `~/.config/housestyle/housestyle.conf` |
+| Command | `python3 scripts/<name>.py` | `housestyle <name>` |
+| Claude Code skills | `skills/` | not installed |
+
+`HOUSESTYLE_CONF` overrides the configuration path in both.

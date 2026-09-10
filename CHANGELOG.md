@@ -21,6 +21,11 @@ First public release in preparation. Not published yet.
 - Claude Code plugin layer (`profile` and `draft` skills), optional — the
   measurement works with any tool, or none
 - 34 tests, each recording a specific way an earlier version was wrong
+- Packaging: `pip install housestyle` with a `housestyle` command, alongside
+  the git checkout and Claude Code plugin layouts. Configuration and language
+  packs are resolved per layout rather than assumed
+- `.claude-plugin/marketplace.json`, so the repository can be added as a
+  Claude Code plugin marketplace directly
 
 ### Fixed — carried over from the private original
 - **Blocklist compared raw words instead of stems.** An entry for an
