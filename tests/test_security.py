@@ -95,15 +95,19 @@ class DeletionGuard(unittest.TestCase):
     a personal directory would then delete folders the user made themselves."""
 
     def test_refuses_home_and_system_paths(self):
-        for path in ("/", os.path.expanduser("~"), os.path.expanduser("~/Documents"),
-                     "/tmp", "/etc", "/Users"):
+        paths = [os.path.expanduser("~"),
+                 os.path.join(os.path.expanduser("~"), "Documents")]
+        paths += [os.path.abspath(os.sep)] if os.name == "nt" else ["/", "/tmp", "/etc", "/Users"]
+        for path in paths:
             with self.subTest(path=path):
                 self.assertIsNotNone(setup_module._refuse_to_delete(path),
                                      f"{path} was not refused")
 
     def test_allows_a_dedicated_directory(self):
+        # Must hold on Windows too, where an earlier version refused every
+        # path because it split on "/" only.
         self.assertIsNone(setup_module._refuse_to_delete(
-            os.path.expanduser("~/Documents/housestyle-corpus")))
+            os.path.join(os.path.expanduser("~"), "Documents", "housestyle-corpus")))
 
     def test_empty_root_is_harmless(self):
         self.assertIsNone(setup_module._refuse_to_delete(""))
@@ -124,6 +128,8 @@ class NoDangerousPrimitives(unittest.TestCase):
             hits = forbidden.findall(source)
             self.assertFalse(hits, f"{name} uses {hits}")
 
+    @unittest.skipUnless(hasattr(sys, "stdlib_module_names"),
+                         "sys.stdlib_module_names needs Python 3.10+")
     def test_no_dependencies_are_imported(self):
         """The no-dependency promise, checked rather than trusted."""
         import ast

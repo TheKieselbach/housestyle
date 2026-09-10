@@ -102,19 +102,31 @@ def do_check():
 # ever removes <ROOT>/corpus and <ROOT>/metrics — but a ROOT of "~" would then
 # delete a personal folder that happens to carry one of those names.
 def _refuse_to_delete(root):
+    """Path checks have to be written portably or they are worse than nothing.
+
+    A first version split on "/" only. On Windows every path then measured as
+    depth 1, so the uninstaller refused to remove anything at all — a bug the
+    test matrix caught and a local run never would.
+    """
     if not root:
         return None
     real = os.path.realpath(root)
+    drive, tail = os.path.splitdrive(real)
+    parts = [p for p in tail.replace("\\", "/").split("/") if p]
+
     forbidden = {os.path.realpath(p) for p in
                  ("/", "/Users", "/home", "/tmp", "/var", "/etc", "/opt",
                   os.path.expanduser("~"),
                   os.path.expanduser("~/Documents"), os.path.expanduser("~/Desktop"),
                   os.path.expanduser("~/Downloads"))}
-    if real in forbidden:
+    if os.name == "nt":
+        forbidden |= {drive + os.sep, os.environ.get("SystemRoot", "C:\\Windows"),
+                      os.path.join(drive + os.sep, "Users")}
+    if real in {os.path.normpath(f) for f in forbidden}:
         return (f"ROOT is {real} — refusing to delete anything under it.\n"
                 f"That is a directory you did not create for this tool. Remove\n"
                 f"the corpus by hand if you are sure.")
-    if len(real.strip("/").split("/")) < 2:
+    if len(parts) < 2:
         return f"ROOT is {real} — too close to the filesystem root to touch."
     return None
 
