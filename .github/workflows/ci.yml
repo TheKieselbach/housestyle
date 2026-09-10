@@ -1,0 +1,30 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    # The matrix is the platform-support claim. If a row is not here, the
+    # README does not get to say it works there.
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        python: ["3.9", "3.11", "3.13"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - name: No dependencies to install
+        run: python -c "import sys; print(sys.version)"
+      - name: Tests
+        run: python -W error::ResourceWarning -m unittest discover tests -v
+      - name: Setup assistant reports cleanly with no configuration
+        run: |
+          python scripts/setup.py --check
+          python scripts/setup.py --uninstall
