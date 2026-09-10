@@ -1,0 +1,58 @@
+name: publish to PyPI
+
+# Runs when a GitHub release is published. Uses PyPI Trusted Publishing
+# (OpenID Connect), so there is no API token stored in this repository —
+# PyPI verifies the workflow identity directly.
+#
+# One-time setup on the PyPI side, before the first release:
+#   PyPI -> your project -> Publishing -> Add a new pending publisher
+#     Owner:            TheKieselbach
+#     Repository:       housestyle
+#     Workflow name:    publish.yml
+#     Environment name: pypi
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  test:
+    uses: ./.github/workflows/ci.yml
+
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: python -m pip install --upgrade build
+      - run: python -m build
+      - name: The wheel must carry the language packs
+        run: |
+          python - <<'PY'
+          import glob, zipfile, sys
+          names = zipfile.ZipFile(glob.glob("dist/*.whl")[0]).namelist()
+          packs = [n for n in names if n.endswith(".json") and "/lang/" in n]
+          print("language packs in wheel:", packs)
+          sys.exit(0 if packs else "no language packs in the wheel")
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write        # required for Trusted Publishing
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - uses: pypa/gh-action-pypi-publish@release/v1
