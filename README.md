@@ -20,20 +20,37 @@ corpus stays on your machine.
 ## Start with what you already have
 
 If you use Claude Code, your corpus already exists. Your own messages in the
-transcripts are typed and dictated prose, and nobody has to export anything:
+transcripts are typed and dictated prose, and nobody has to export anything.
 
 ```bash
-cp voiceprint.conf.example voiceprint.conf   # set ROOT and LANG
+python3 scripts/setup.py                      # four questions, shows what it will create
 python3 scripts/collect_transcripts.py
 python3 scripts/measure.py "$ROOT/corpus/transcripts.jsonl" --tag transcripts
 ```
 
-That is the whole first run. You now have a metrics file describing how you
+That is the whole first run. You now have a file of numbers describing how you
 write, and no text has left the machine.
 
-Add more registers as you go — sent mail (`collect_mail.py`, mbox or
-Microsoft Graph), published articles (`collect_web.py`). Registers are kept
-apart on purpose: most people write very differently in mail than in public.
+Add registers as you go — sent mail (mbox or Microsoft Graph), published
+articles. Registers are kept apart on purpose: most people write very
+differently in mail than in public. Getting your texts out of Gmail, Microsoft
+365, Apple Mail or any IMAP provider is covered in
+[`docs/getting-your-texts.md`](docs/getting-your-texts.md).
+
+**Requirements: Python 3.9 and nothing else.** No packages, no account, no
+network. See [`INSTALL.md`](INSTALL.md) — including exactly what gets created
+and how to remove it.
+
+## Works with whatever you already use
+
+The measurement is plain Python and produces a Markdown profile. Paste it into
+ChatGPT's custom instructions, a Claude Project or Style, a Gem, your
+`.cursorrules`, or a local model's system prompt. Or read it yourself — it is
+an honest description of how you write.
+
+The `skills/` directory adds a [Claude Code](https://claude.com/claude-code)
+plugin on top, which loads the profile automatically and checks drafts against
+it. **That layer is optional** and deleting it changes nothing else.
 
 ## What it measures
 
@@ -107,6 +124,21 @@ The short version: a guardrail that only exists in a policy document is not a
 guardrail. This one is in the file layout — the corpus cannot reach a model
 by accident, because the thing that reaches the model is a JSON file full of
 numbers.
+
+## Tests
+
+```bash
+python3 -W error::ResourceWarning -m unittest discover tests -v
+```
+
+34 tests, no corpus and no setup needed. They are not coverage theatre — each
+one records a specific way an earlier version was wrong, including all three
+bugs listed in the changelog.
+
+## Contributing
+
+The most useful contribution is **a language pack** — one JSON file, no code,
+and it needs a native speaker. See [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ## License
 
