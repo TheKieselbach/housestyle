@@ -29,14 +29,31 @@ OWN = ("transcripts.jsonl", "mail.jsonl", "approved.jsonl")
 
 
 def make_stem(lang):
+    """Crude stemmer: normalise characters, strip one inflectional ending,
+    then truncate.
+
+    Truncation alone is not enough for inflected languages, and the failure
+    is silent. German "tragen" truncates to `tragen`, "traegt" to `traegt` —
+    different stems, so a blocklist entry never matches the inflected form it
+    was written for. Stripping the ending first collapses both to `trag`.
+
+    Deliberately not a real stemmer: a real one is a dependency, and this is
+    accurate enough for "does this person ever use this word".
+    """
     cfg = lang.get("stem", {})
     length = cfg.get("length", 6)
     mapping = cfg.get("normalize", {})
+    suffixes = sorted(cfg.get("suffixes", []), key=len, reverse=True)
+    min_length = cfg.get("min_length", 4)
 
     def stem(word):
         w = word.lower()
         for a, b in mapping.items():
             w = w.replace(a, b)
+        for suf in suffixes:
+            if w.endswith(suf) and len(w) - len(suf) >= min_length:
+                w = w[:-len(suf)]
+                break
         return w[:length]
     return stem
 

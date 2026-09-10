@@ -22,7 +22,36 @@
    "ö": "o",
    "ü": "u",
    "ß": "ss"
-  }
+  },
+  "suffixes": [
+   "ungen",
+   "erung",
+   "chen",
+   "lein",
+   "ende",
+   "end",
+   "ern",
+   "est",
+   "est",
+   "ten",
+   "tet",
+   "est",
+   "en",
+   "er",
+   "es",
+   "et",
+   "em",
+   "st",
+   "te",
+   "ne",
+   "ns",
+   "e",
+   "n",
+   "s",
+   "t",
+   "r"
+  ],
+  "min_length": 4
  },
  "stopwords": [
   "der",

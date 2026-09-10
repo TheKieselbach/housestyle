@@ -18,7 +18,35 @@
  ],
  "stem": {
   "length": 6,
-  "normalize": {}
+  "normalize": {},
+  "suffixes": [
+   "ational",
+   "iveness",
+   "fulness",
+   "ousness",
+   "ization",
+   "ation",
+   "ingly",
+   "edly",
+   "ment",
+   "ness",
+   "ance",
+   "ence",
+   "able",
+   "ible",
+   "ing",
+   "ies",
+   "ied",
+   "ies",
+   "ers",
+   "est",
+   "ed",
+   "es",
+   "ly",
+   "er",
+   "s"
+  ],
+  "min_length": 4
  },
  "stopwords": [
   "the",
