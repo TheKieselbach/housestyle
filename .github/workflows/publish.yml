@@ -39,6 +39,11 @@ jobs:
           print("language packs in wheel:", packs)
           sys.exit(0 if packs else "no language packs in the wheel")
           PY
+      - name: The metadata must render on PyPI
+        run: |
+          python -m pip install --upgrade twine
+          python -m twine check --strict dist/*
+
       - uses: actions/upload-artifact@v4
         with:
           name: dist
