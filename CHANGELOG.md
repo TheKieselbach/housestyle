@@ -3,9 +3,9 @@
 Format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versions follow [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [0.1.0] — 2026-09-11
 
-First public release in preparation. Not published yet.
+First public release.
 
 ### Added
 - Local style measurement over a corpus: sentence lengths, punctuation,

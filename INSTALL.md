@@ -28,7 +28,7 @@ a tree of packages you did not read. Everything here is `re`, `json`,
 ### As a Claude Code plugin
 
 ```
-/plugin marketplace add <owner>/housestyle
+/plugin marketplace add TheKieselbach/housestyle
 /plugin install housestyle@housestyle
 ```
 
